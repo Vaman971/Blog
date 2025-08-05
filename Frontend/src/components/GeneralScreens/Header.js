@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import SearchForm from './SearchForm';
 import '../../Css/Header.css'
@@ -65,7 +65,7 @@ const Header = () => {
 
                                     :
 
-                                    <img src={`/userPhotos/${activeUser.photo}`} alt={activeUser.username} />
+                                    <img src={`${process.env.REACT_APP_API_URL}/userPhotos/${activeUser.photo}`} alt={activeUser.username} />
 
                                 }
 
@@ -78,7 +78,6 @@ const Header = () => {
                                 </div>
 
                             </div>
-
 
                         </div>
 

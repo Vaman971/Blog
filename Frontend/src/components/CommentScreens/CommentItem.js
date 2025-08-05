@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaStar } from 'react-icons/fa';
 import {
     MdOutlineWavingHand,
@@ -19,7 +19,7 @@ const CommentItem = ({ comment, activeUser }) => {
 
             const comment_id = comment._id
             try {
-                const { data } = await axios.post(`/comment/${comment_id}/getCommentLikeStatus`, { activeUser }, {
+                const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/comment/${comment_id}/getCommentLikeStatus`, { activeUser }, {
                     headers: {
                         "Content-Type": "application/json",
                         authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -36,7 +36,8 @@ const CommentItem = ({ comment, activeUser }) => {
 
         getCommentLikeStatus()
 
-    }, [])
+    }, [activeUser, comment._id, navigate])
+    
     const editDate = (createdAt) => {
         const d = new Date(createdAt);
         var datestring = d.toLocaleString('eng', { month: 'long' }).substring(0, 3) + " " + d.getDate()
@@ -50,7 +51,7 @@ const CommentItem = ({ comment, activeUser }) => {
         const comment_id = comment._id
 
         try {
-            const { data } = await axios.post(`/comment/${comment_id}/like`, { activeUser }, {
+            const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/comment/${comment_id}/like`, { activeUser }, {
                 headers: {
                     "Content-Type": "application/json",
                     authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -73,7 +74,7 @@ const CommentItem = ({ comment, activeUser }) => {
             <div className="comment-top-block">
 
                 <section>
-                    <img src={`/userPhotos/${comment.author.photo}`} alt={comment.author.username} width="35" />
+                    <img src={`${process.env.REACT_APP_API_URL}/userPhotos/${comment.author.photo}`} alt={comment.author.username} width="35" />
 
                     <div>
                         <span className='comment-author-username' >{comment.author.username}</span>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import StoryComments from './StoryComments';
 import axios from 'axios';
 import AddComment from './AddComment';
@@ -10,21 +10,21 @@ const CommentSidebar = ({ slug, sidebarShowStatus, setSidebarShowStatus, activeU
 
   const sidebarRef = useRef(null);
 
-  useEffect(() => {
-    getStoryComments()
-  }, [setCommentList])
-
-
-  const getStoryComments = async () => {
-    try {
-      const { data } = await axios.get(`/comment/${slug}/getAllComment`)
-      setCommentList(data.data)
-      setCount(data.count)
-    }
-    catch (error) {
-      console.log(error.response.data.error);
-    }
+const getStoryComments = useCallback(async () => {
+  try {
+    const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/comment/${slug}/getAllComment`)
+    setCommentList(data.data)
+    setCount(data.count)
   }
+  catch (error) {
+    console.log(error.response?.data?.error);
+  }
+}, [slug]);
+
+useEffect(() => {
+  getStoryComments()
+}, [getStoryComments]);
+
 
   useEffect(() => {
     const checkIfClickedOutside = e => {
@@ -38,7 +38,7 @@ const CommentSidebar = ({ slug, sidebarShowStatus, setSidebarShowStatus, activeU
       // Cleanup the event listener
       document.removeEventListener("mousedown", checkIfClickedOutside)
     }
-  }, [sidebarShowStatus])
+  }, [sidebarShowStatus, setSidebarShowStatus])
 
 
 

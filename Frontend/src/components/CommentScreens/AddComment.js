@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import { useState, useRef } from 'react'
 import axios from 'axios';
 import StarRating from './StarRating';
 import { BsShieldCheck, BsCheckAll } from 'react-icons/bs'
@@ -21,7 +21,7 @@ const AddComment = ({ setSidebarShowStatus, slug, getStoryComments, activeUser, 
 
         e.preventDefault();
         try {
-            await axios.post(`/comment/${slug}/addComment`, { content, star }, {
+            await axios.post(`${process.env.REACT_APP_API_URL}/comment/${slug}/addComment`, { content, star }, {
                 headers: {
                     "Content-Type": "application/json",
                     authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -93,7 +93,7 @@ const AddComment = ({ setSidebarShowStatus, slug, getStoryComments, activeUser, 
 
 
                     <div className={showStatus ? 'activeuser-info ' : 'activeuser-info hidden '}>
-                        <img src={`/userPhotos/${activeUser.photo}`} alt={activeUser.username} />
+                        <img src={`${process.env.REACT_APP_API_URL}/userPhotos/${activeUser.photo}`} alt={activeUser.username} />
                         <span className='username'>{activeUser.username}  </span>
                     </div>
 

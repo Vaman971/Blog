@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import "../../Css/DetailStory.css"
 import Loader from '../GeneralScreens/Loader';
@@ -15,8 +15,8 @@ const DetailStory = () => {
   const [likeCount, setLikeCount] = useState(0)
   const [activeUser, setActiveUser] = useState({})
   const [story, setStory] = useState({})
-  const [storyLikeUser, setStoryLikeUser] = useState([])
-  const [storyReportUser, setStoryReportUser] = useState([])
+  // const [storyLikeUser, setStoryLikeUser] = useState([])
+  // const [storyReportUser, setStoryReportUser] = useState([])
   const [sidebarShowStatus, setSidebarShowStatus] = useState(false)
   const [loading, setLoading] = useState(true)
   const slug = useParams().slug
@@ -37,7 +37,7 @@ const DetailStory = () => {
       setLoading(true)
       var activeUser = {}
       try {
-        const { data } = await axios.get("/auth/private", {
+        const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/auth/private`, {
           headers: {
             "Content-Type": "application/json",
             authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -54,14 +54,14 @@ const DetailStory = () => {
       }
 
       try {
-        const { data } = await axios.post(`/story/${slug}`, { activeUser })
+        const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/story/${slug}`, { activeUser })
         setStory(data.data)
         setLikeStatus(data.likeStatus)
         setLikeCount(data.data.likeCount)
-        setStoryLikeUser(data.data.likes)
+        // setStoryLikeUser(data.data.likes)
         setUserReported(data.userReported)
         setReportCount(data.data.reportCount)
-        setStoryReportUser(data.data.reports)
+        // setStoryReportUser(data.data.reports)
 
 
         setLoading(false)
@@ -89,14 +89,14 @@ const DetailStory = () => {
     };
     getDetailStory();
 
-  }, [slug, setLoading])
+  }, [slug, setLoading,navigate,story?.reportCount])
 
   useEffect(() => {
     // Create a new function to delete the blog
     const deleteBlogIfReportExceeds30 = async () => {
       try {
         if (autoDeleteEnabled) {
-          await axios.delete(`/story/${slug}/deleteIfReportExceeds30`, {
+          await axios.delete(`${process.env.REACT_APP_API_URL}/story/${slug}/deleteIfReportExceeds30`, {
             headers: {
               'Content-Type': 'application/json',
               authorization: `Bearer ${localStorage.getItem('authToken')}`,
@@ -119,7 +119,7 @@ const DetailStory = () => {
       // Clean up the interval when the component unmounts
       clearInterval(autoDeleteInterval);
     };
-  }, [slug, autoDeleteEnabled]);
+  }, [slug, autoDeleteEnabled,navigate,story?.reportCount]);
 
 
   const handleLike = async () => {
@@ -128,7 +128,7 @@ const DetailStory = () => {
     }, 1500)
 
     try {
-      const { data } = await axios.post(`/story/${slug}/like`, { activeUser }, {
+      const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/story/${slug}/like`, { activeUser }, {
         headers: {
           "Content-Type": "application/json",
           authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -136,7 +136,7 @@ const DetailStory = () => {
       })
 
       setLikeCount(data.data.likeCount)
-      setStoryLikeUser(data.data.likes)
+      // setStoryLikeUser(data.data.likes)
     }
     catch (error) {
       setStory({})
@@ -165,14 +165,14 @@ const DetailStory = () => {
 
         try {
           // Send a report request to the backend
-         const { data } = await axios.post(`/story/${slug}/report`, { activeUser }, {
+         const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/story/${slug}/report`, { activeUser }, {
             headers: {
               "Content-Type": "application/json",
               authorization: `Bearer ${localStorage.getItem("authToken")}`,
             },
           });
           setReportCount(data.data.reportCount)
-          setStoryReportUser(data.data.reports)
+          // setStoryReportUser(data.data.reports)
         } catch (error) {
           console.error("Report request failed", error);
         }
@@ -186,7 +186,7 @@ const DetailStory = () => {
 
       try {
 
-        await axios.delete(`/story/${slug}/delete`, {
+        await axios.delete(`${process.env.REACT_APP_API_URL}/story/${slug}/delete`, {
           headers: {
             "Content-Type": "application/json",
             authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -217,7 +217,7 @@ const DetailStory = () => {
 
     try {
 
-      const { data } = await axios.post(`/user/${slug}/addStoryToReadList`, { activeUser }, {
+      const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/user/${slug}/addStoryToReadList`, { activeUser }, {
         headers: {
           "Content-Type": "application/json",
           authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -252,7 +252,7 @@ const DetailStory = () => {
                   <ul>
                     {story.author &&
                       <li className='story-author-info'>
-                        <img src={`/userPhotos/${story.author.photo}`} alt={story.author.username} />
+                        <img src={`${process.env.REACT_APP_API_URL}/userPhotos/${story.author.photo}`} alt={story.author.username} />
                         <span className='story-author-username'>{story.author.username}  </span>
                       </li>
                     }
@@ -312,7 +312,7 @@ const DetailStory = () => {
               <div className='story-content' >
 
                 <div className="story-banner-img">
-                  <img src={`/storyImages/${story.image}`} alt={story.title} />
+                  <img src={`${process.env.REACT_APP_API_URL}/storyImages/${story.image}`} alt={story.title} />
 
                 </div>
 

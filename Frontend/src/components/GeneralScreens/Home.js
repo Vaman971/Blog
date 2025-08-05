@@ -19,39 +19,33 @@ const Home = () => {
   const [pages, setPages] = useState(1);
 
 
-  useEffect(() => {
-    const getStories = async () => {
-
-      setLoading(true)
-      try {
-
-        const { data } = await axios.get(`/story/getAllStories?search=${searchKey || ""}&page=${page}`)
-
-        if (searchKey) {
-          navigate({
-            pathname: '/',
-            search: `?search=${searchKey}${page > 1 ? `&page=${page}` : ""}`,
-          });
-        }
-        else {
-          navigate({
-            pathname: '/',
-            search: `${page > 1 ? `page=${page}` : ""}`,
-          });
-
-
-        }
-        setStories(data.data)
-        setPages(data.pages)
-
-        setLoading(false)
+useEffect(() => {
+  const getStories = async () => {
+    setLoading(true)
+    try {
+      const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/story/getAllStories?search=${searchKey || ""}&page=${page}`)
+      if (searchKey) {
+        navigate({
+          pathname: '/',
+          search: `?search=${searchKey}${page > 1 ? `&page=${page}` : ""}`,
+        });
       }
-      catch (error) {
-        setLoading(true)
+      else {
+        navigate({
+          pathname: '/',
+          search: `${page > 1 ? `page=${page}` : ""}`,
+        });
       }
+      setStories(data.data)
+      setPages(data.pages)
+      setLoading(false)
     }
-    getStories()
-  }, [setLoading, search, page, navigate])
+    catch (error) {
+      setLoading(true)
+    }
+  }
+  getStories()
+}, [setLoading, search, page, navigate, searchKey])
 
 
   useEffect(() => {

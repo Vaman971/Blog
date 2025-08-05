@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import "../../Css/Profile.css"
 import { Link, useNavigate } from 'react-router-dom';
@@ -23,26 +23,19 @@ const Profile = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-
         const getUserProfile = async () => {
-
             setLoading(true)
-
             try {
-                const { data } = await axios.get("/user/profile", config)
-
+                const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/user/profile`, config)
                 setUser(data.data)
-
                 setLoading(false)
             }
             catch (error) {
                 navigate('/')
             }
         }
-
         getUserProfile()
-    }, [setLoading])
-
+    }, [setLoading, config, navigate])
 
 
     return (

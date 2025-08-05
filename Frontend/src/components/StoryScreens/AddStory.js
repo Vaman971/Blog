@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from 'react'
+import { useRef, useContext } from 'react'
 import { useState } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
@@ -36,7 +36,7 @@ const AddStory = () => {
         formdata.append("content", content)
 
         try {
-            const { data } = await axios.post("/story/addstory", formdata, config)
+            await axios.post(`${process.env.REACT_APP_API_URL}/story/addstory`, formdata, config)
             setSuccess('Add story successfully ')
 
             clearInputs()

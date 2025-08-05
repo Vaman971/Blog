@@ -13,7 +13,7 @@ const PrivateRoute =( ) => {
 
     useEffect(() => {
 
-       const controlAuth = async () => {
+    const controlAuth = async () => {
         const config = {
             headers: {
             "Content-Type": "application/json",
@@ -21,7 +21,7 @@ const PrivateRoute =( ) => {
             },
         };
         try {
-            const { data } = await axios.get("/auth/private", config); 
+            const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/auth/private`, config); 
 
             setAuth(true)
             setActiveUser(data.user)
@@ -42,7 +42,7 @@ const PrivateRoute =( ) => {
         };
 
         controlAuth()
-    }, [bool,navigate])
+    }, [bool, navigate, setActiveUser, setConfig])
 
 
     return (auth ? <Outlet />  : <Home error={error} />)

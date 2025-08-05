@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useContext } from 'react';
+import { useEffect, useState, useRef, useContext } from 'react';
 import axios from 'axios';
 import Loader from '../GeneralScreens/Loader';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
@@ -13,7 +13,7 @@ const EditStory = () => {
     const slug = useParams().slug
     const imageEl = useRef(null)
     const [loading, setLoading] = useState(true)
-    const [story, setStory] = useState({})
+    // const [story, setStory] = useState({})
     const [image, setImage] = useState('')
     const [previousImage, setPreviousImage] = useState('')
     const [title, setTitle] = useState('')
@@ -27,8 +27,8 @@ const EditStory = () => {
         const getStoryInfo = async () => {
             setLoading(true)
             try {
-                const { data } = await axios.get(`/story/editStory/${slug}`, config)
-                setStory(data.data)
+                const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/story/editStory/${slug}`, config)
+                // setStory(data.data)
                 setTitle(data.data.title)
                 setContent(data.data.content)
                 setImage(data.data.image)
@@ -40,7 +40,7 @@ const EditStory = () => {
             }
         }
         getStoryInfo()
-    }, [])
+    }, [config, navigate, slug])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -51,7 +51,7 @@ const EditStory = () => {
         formdata.append("previousImage", previousImage)
 
         try {
-            const { data } = await axios.put(`/story/${slug}/edit`, formdata, config)
+            await axios.put(`${process.env.REACT_APP_API_URL}/story/${slug}/edit`, formdata, config)
 
             setSuccess('Edit Story successfully ')
 
@@ -108,7 +108,7 @@ const EditStory = () => {
                                 <div class="absolute">
                                     Currently Image
                                 </div>
-                                <img src={`http://localhost:5000/storyImages/${previousImage}`} alt="storyImage" />
+                                <img src={`${process.env.REACT_APP_API_URL}/storyImages/${previousImage}`} alt="storyImage" />
                             </div>
                             <div class="StoryImageField">
                                 <AiOutlineUpload />

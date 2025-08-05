@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { FaUserAlt } from 'react-icons/fa'
 import { AiOutlineUpload } from 'react-icons/ai'
@@ -27,7 +27,7 @@ const EditProfile = () => {
         formdata.append("photo", photo)
 
         try {
-            const { data } = await axios.post("/user/editProfile", formdata, config)
+            await axios.post(`${process.env.REACT_APP_API_URL}/user/editProfile`, formdata, config)
 
             setSuccess('Edit Profile successfully ')
             setTimeout(() => {
@@ -57,7 +57,6 @@ const EditProfile = () => {
             {
                 loading ? <Loader /> :
                     <div className="Inclusive-editprofile-page">
-
                         <form onSubmit={handleSubmit}>
                             {error && <div className="error_msg">{error}</div>}
 
@@ -70,22 +69,18 @@ const EditProfile = () => {
                                     onChange={(e) => setUsername(e.target.value)}
                                 />
                                 <label htmlFor="username">Username</label>
-
                             </div>
 
                             <div className="input-wrapper">
-
                                 <input type="email"
                                     id="email" placeholder="Email  " name='email'
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
                                 <label htmlFor="email">E-mail</label>
-
                             </div>
 
                             <div className="profile-ımg-upld-wrapper">
-
                                 <div class="ProfilePhotoField">
                                     <FaUserAlt />
                                     <div class="txt">
@@ -110,37 +105,20 @@ const EditProfile = () => {
                                             setPhoto(e.target.files[0])
                                         }}
                                     />
-
-
                                 </div>
-
-
                                 <div class="currentImage">
                                     <div class="absolute">
                                         Currently Image
                                     </div>
-                                    <img src={`http://localhost:5000/userPhotos/${previousPhoto}`} alt="userPhoto" />
+                                    <img src={`${process.env.REACT_APP_API_URL}/userPhotos/${previousPhoto}`} alt="userPhoto" />
                                 </div>
-
                             </div>
-
                             <button type='submit' className='editprofile-btn'
                             >Edit Profile </button>
-
-
-
                         </form>
-
-
-
-
-
-
-
                     </div>
             }
         </>
-
     )
 }
 

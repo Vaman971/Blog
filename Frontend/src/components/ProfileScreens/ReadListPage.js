@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import axios from 'axios'
 import Loader from "../GeneralScreens/Loader";
 import { useNavigate, Link } from 'react-router-dom'
@@ -21,7 +21,7 @@ const ReadListPage = () => {
             setLoading(true)
 
             try {
-                const { data } = await (await axios.get(`/user/readList`, config)).data
+                const { data } = await (await axios.get(`${process.env.REACT_APP_API_URL}/user/readList`, config)).data
                 setReadList(data)
                 setLoading(false)
             }
@@ -31,8 +31,7 @@ const ReadListPage = () => {
         }
         getUserReadingList()
 
-
-    }, [])
+    }, [config, navigate])
 
 
     const editDate = (createdAt) => {
@@ -55,7 +54,7 @@ const ReadListPage = () => {
 
                     <div className="readList-top-block">
 
-                        <img src={`/userPhotos/${activeUser.photo}`} alt={activeUser.username} />
+                        <img src={`${process.env.REACT_APP_API_URL}/userPhotos/${activeUser.photo}`} alt={activeUser.username} />
 
 
                         <div className='activeUser-info-wrapper'>

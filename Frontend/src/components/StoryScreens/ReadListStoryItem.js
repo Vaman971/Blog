@@ -1,4 +1,3 @@
-import React from 'react'
 import { AiFillStar } from 'react-icons/ai'
 import { BsThreeDots, BsBookmarkFill } from 'react-icons/bs'
 
@@ -72,7 +71,7 @@ const ReadListStoryItem = ({ story, editDate }) => {
 
             <section>
                 <div className="story-Image-Wrap">
-                    <img src={`/storyImages/${story.image}`} alt={story.title} width="180px" />
+                    <img src={`${process.env.REACT_APP_API_URL}/storyImages/${story.image}`} alt={story.title} width="180px" />
                 </div>
 
             </section>

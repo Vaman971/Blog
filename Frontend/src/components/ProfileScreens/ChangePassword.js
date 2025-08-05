@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import '../../Css/ChangePassword.css'
@@ -30,7 +30,7 @@ const ChangePassword = () => {
 
         try {
             const { data } = await axios.put(
-                "/user/changePassword",
+                `${process.env.REACT_APP_API_URL}/user/changePassword`,
                 {
                     newPassword,
                     oldPassword
