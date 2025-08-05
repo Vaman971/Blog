@@ -3,6 +3,7 @@
 Fullstack open source blogging application made with MongoDB, Express, React & Nodejs (MERN) </h5>
 <br/>
 
+  * [Production Deployment](#Production Deployment)
   * [Configuration and Setup](#configuration-and-setup)
   * [Key Features](#key-features)
   * [Technologies used](#technologies-used)
@@ -11,6 +12,11 @@ Fullstack open source blogging application made with MongoDB, Express, React & N
       - [Database](#database)
   * [License](#license)
 
+## Production Deployment
+
+You can view the live production version of this project here:
+
+**[http://digital-samudaay.s3-website.eu-north-1.amazonaws.com/](http://digital-samudaay.s3-website.eu-north-1.amazonaws.com/)**
 
 ## Configuration and Setup
 
