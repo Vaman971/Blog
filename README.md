@@ -9,8 +9,6 @@ Fullstack open source blogging application made with MongoDB, Express, React & N
       - [Frontend](#frontend)
       - [Backend](#backend)
       - [Database](#database)
-  * [📸 Screenshots](#screenshots)
-  * [Author](#author)
   * [License](#license)
 
 
