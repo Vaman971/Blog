@@ -5,12 +5,15 @@
 node_modules/
 /.pnp
 .pnp.js
+
+
 # testing
 /coverage
 
 # production
-/build
 Config/
+build/
+
 # misc
 .env
 .DS_Store
