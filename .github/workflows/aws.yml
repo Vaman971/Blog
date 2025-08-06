@@ -78,7 +78,7 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         script: |
           cd ${{ secrets.EC2_PATH }}
-          git pull origin deploy
+          git pull origin master
           npm install
           pm2 restart all
 
