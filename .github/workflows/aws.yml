@@ -20,7 +20,7 @@ jobs:
       run: |
         echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" > .env.production
         npm install
-        npm run build
+        npm run build --no-cache
 
     # Install dependencies for backend
     - name: Debug AWS Secrets (sanitized)
