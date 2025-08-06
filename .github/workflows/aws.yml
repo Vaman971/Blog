@@ -18,8 +18,9 @@ jobs:
     - name: Install and build frontend
       working-directory: ./Frontend
       run: |
-        echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" > .env.production
-        echo "NODE_OPTIONS=${{ secrets.NODE_OPTIONS }}" > .env.production
+        echo "REACT_APP_API_URL=${{ vars.REACT_APP_API_URL }}" > .env.production
+        echo "NODE_OPTIONS=${{ vars.NODE_OPTIONS }}" > .env.production
+        export NODE_OPTIONS=--max_old_space_size=8192
         rm -rf node_modules
         rm -rf build
         npm install
