@@ -79,6 +79,13 @@ jobs:
         script: |
           cd ${{ secrets.EC2_PATH }}
           git pull origin master
+          echo "MONGO_URI=${{ vars.MONGO_URI }}" > .env.production
+          echo "JWT_SECRET_KEY=${{ vars.JWT_SECRET_KEY }}" > .env.production
+          echo "JWT_EXPIRE=${{ vars.JWT_EXPIRE }}" > .env.production
+          echo "URI=${{ vars.URI }}" > .env.production
+          echo "RESET_PASSWORD_EXPIRE=${{ vars.RESET_PASSWORD_EXPIRE }}" > .env.production
+          echo "NODE_ENV=${{ vars.NODE_ENV }}" > .env.production
+          echo "PORT=${{ vars.PORT }}" > .env.production
           npm install
           pm2 restart all
 
