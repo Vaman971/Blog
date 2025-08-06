@@ -1,0 +1,91 @@
+name: MERN Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout code
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Build React App
+    - name: Install and build frontend
+      working-directory: ./Frontend
+      run: |
+        echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" > .env.production
+        npm install
+        npm run build
+
+    # Install dependencies for backend
+    - name: Debug AWS Secrets (sanitized)
+      run: |
+        echo "ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}"
+        echo "SECRET_KEY_LENGTH=${{ secrets.AWS_SECRET_ACCESS_KEY != '' && 'OK' || 'EMPTY' }}"
+
+
+    # Test AWS credentials
+    - name: Test AWS credentials
+      run: aws sts get-caller-identity
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: eu-north-1
+
+
+    # Deploy to S3
+    - name: Upload to S3
+      uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --delete
+      env:
+        AWS_S3_BUCKET: digital-samudaay
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: eu-north-1
+        SOURCE_DIR: Frontend/build
+
+
+    # Create GitHub Deployment
+    - name: Create GitHub Deployment
+      id: deployment
+      uses: bobheadxi/deployments@v1
+      with:
+        step: start
+        token: ${{ secrets.GITHUB_TOKEN }}
+        env: production
+        ref: ${{ github.ref }}
+        desc: 'Deployment to S3'
+        logs: http://digital-samudaay.s3-website.eu-north-1.amazonaws.com/
+        env_url: http://digital-samudaay.s3-website.eu-north-1.amazonaws.com/
+
+
+    # SSH into EC2 and deploy backend
+    - name: Deploy backend to EC2
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_KEY }}
+        script: |
+          cd ${{ secrets.EC2_PATH }}
+          git pull origin deploy
+          npm install
+          pm2 restart all
+
+
+    # Mark deployment as successful
+    - name: Mark deployment as successful
+      uses: bobheadxi/deployments@v1
+      with:
+        step: finish
+        token: ${{ secrets.GITHUB_TOKEN }}
+        status: success
+        env: production
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+        env_url: http://digital-samudaay.s3-website.eu-north-1.amazonaws.com/
