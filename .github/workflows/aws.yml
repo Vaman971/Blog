@@ -19,6 +19,7 @@ jobs:
       working-directory: ./Frontend
       run: |
         echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" > .env.production
+        echo "NODE_OPTIONS=${{ secrets.NODE_OPTIONS }}" > .env.production
         npm install
         npm run build --no-cache
 
