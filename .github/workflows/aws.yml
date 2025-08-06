@@ -61,7 +61,7 @@ jobs:
       uses: bobheadxi/deployments@v1
       with:
         step: start
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GH_PAT }}
         env: production
         ref: ${{ github.ref }}
         desc: 'Deployment to S3'
